@@ -69,7 +69,7 @@ export default function Contact() {
             </div>
 
             <footer className="text-center text-gray-600 py-10 text-sm mt-10">
-                <p>© {new Date().getFullYear()} Portfolio. Built with Next.js & Tailwind.</p>
+                <p>© {new Date().getFullYear()} Ahmad T Chaudhry's Portfolio. Built with Next.js & Tailwind.</p>
             </footer>
         </section>
     );
