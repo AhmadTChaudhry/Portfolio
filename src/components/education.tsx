@@ -8,6 +8,7 @@ type EducationEntry = {
     location?: string;
     years: string;
     highlights: string[];
+    transcriptUrl?: string;
 };
 
 const education: EducationEntry[] = [
@@ -16,6 +17,7 @@ const education: EducationEntry[] = [
         institution: "Deakin University",
         location: "Burwood, Australia",
         years: "03/2024 – 02/2026",
+        transcriptUrl: "/transcripts/masters-academic-transcript.pdf",
         highlights: [
             "Major: Internet of Things (IoT).",
             "Achieved High Distinctions in all 16 units.",
@@ -96,6 +98,19 @@ export default function Education() {
                                     </li>
                                 ))}
                             </ul>
+
+                            {e.transcriptUrl && (
+                                <div className="mt-8">
+                                    <a
+                                        href={e.transcriptUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="liquid-glass-btn inline-flex items-center justify-center px-4 py-2 text-sm font-bold uppercase tracking-widest"
+                                    >
+                                        View transcript
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
