@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import { getProjectBySlug, projects } from "@/data/projects";
 import type { ProjectMedia, ProjectLink } from "@/data/projects";
 import { getYoutubeVideoId } from "@/lib/youtube";
+import MinutelyGallery from "@/components/minutely-gallery";
 
 export function generateStaticParams() {
     return projects.map((p) => ({ slug: p.slug }));
@@ -57,13 +58,14 @@ function ProjectHeroMedia({ media }: { media?: ProjectMedia[] }) {
             </div>
         );
     }
+    /* object-contain + no fixed 16:9: wide heroes (e.g. Minutely) stay fully visible like listing cards */
     return (
-        <div className="aspect-video w-full rounded-2xl overflow-hidden bg-gray-900 relative">
+        <div className="flex w-full items-center justify-center rounded-2xl bg-gray-900 px-2 py-4 sm:px-4 sm:py-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
                 src={first.url}
-                alt="Project"
-                className="w-full h-full object-cover"
+                alt="Project hero screenshot"
+                className="mx-auto block h-auto w-full max-h-[min(72vh,720px)] object-contain"
             />
         </div>
     );
@@ -159,6 +161,160 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                                 ))}
                             </div>
                         </section>
+
+                        <section className="mb-10">
+                            <h2 className="text-xl font-bold mb-3 text-secondary">
+                                How I built it
+                            </h2>
+                            <div className="text-gray-300 leading-relaxed whitespace-pre-line">
+                                {project.execution}
+                            </div>
+                        </section>
+
+                        {project.slug === "lora-encrypted-comms" && (
+                            <>
+                                <section className="mb-10">
+                                    <h2 className="text-xl font-bold mb-3 text-secondary">
+                                        Hardware architecture
+                                    </h2>
+                                    <figure className="mb-8 rounded-2xl overflow-hidden bg-white p-4 sm:p-6 border border-white/10">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src="/projects/lora-encrypted-comms/node-configuration.png"
+                                            alt="Node configuration diagram: ESP32 connected to OLED, SX1262 LoRa transceiver, and LiPo battery"
+                                            className="mx-auto w-full max-w-2xl h-auto object-contain"
+                                        />
+                                        <figcaption className="mt-3 text-center text-sm text-gray-500">
+                                            Node configuration
+                                        </figcaption>
+                                    </figure>
+                                    <p className="text-gray-300 leading-relaxed mb-6">
+                                        The system is designed primarily for ESP32-based boards with integrated LoRa
+                                        transceivers and OLED displays but will work with any ESP32 board connected
+                                        with an SX1262 LoRa module over SPI and an OLED display over I2C.
+                                    </p>
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-3">
+                                        Tested boards
+                                    </h3>
+                                    <ul className="list-disc pl-5 space-y-2 text-gray-300 mb-6">
+                                        <li>
+                                            Heltec WiFi LoRa 32 V3 (ESP32-S3, SX1262 LoRa, 0.96&quot; OLED)
+                                        </li>
+                                        <li>
+                                            Seeed Studio XIAO ESP32S3 with WIO SX1262 LoRa module attachment (will
+                                            require an external OLED over I2C for full functionality)
+                                        </li>
+                                    </ul>
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-3">
+                                        Components per node
+                                    </h3>
+                                    <ul className="list-disc pl-5 space-y-2 text-gray-300">
+                                        <li>ESP32 microcontroller</li>
+                                        <li>SX1262 LoRa transceiver</li>
+                                        <li>OLED display (SSD1306/SH1106)</li>
+                                        <li>WiFi antenna</li>
+                                        <li>LoRa antenna</li>
+                                        <li>Input button (typically GPIO 0 on ESP32 dev boards)</li>
+                                    </ul>
+                                </section>
+
+                                <section className="mb-10">
+                                    <h2 className="text-xl font-bold mb-3 text-secondary">
+                                        Communication protocols
+                                    </h2>
+                                    <figure className="mb-8 rounded-2xl overflow-hidden bg-gray-950 p-4 sm:p-6 border border-white/10">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src="/projects/lora-encrypted-comms/communication-cycle.png"
+                                            alt="Communication cycle diagram: LoRa data packet from node 1 to node 2 and ACK packet back, showing packet structure"
+                                            className="mx-auto w-full h-auto object-contain"
+                                        />
+                                        <figcaption className="mt-3 text-center text-sm text-gray-500">
+                                            LoRa communication cycle (data and ACK)
+                                        </figcaption>
+                                    </figure>
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-3">LoRa protocol</h3>
+                                    <ul className="space-y-4 text-gray-300 mb-6">
+                                        <li>
+                                            <span className="font-semibold text-gray-200">Data packet: </span>
+                                            <code className="text-[#ffd89b] text-sm break-all">
+                                                MY_DEVICE_ID:LORA_PACKET_PREFIX:currentLoRaMessageId:ENCRYPTED_MESSAGE
+                                            </code>
+                                            <p className="mt-2 text-gray-400 text-sm">
+                                                Example:{" "}
+                                                <code className="text-gray-300">
+                                                    BigNode:P:123:AABBCCDD
+                                                </code>{" "}
+                                                (where{" "}
+                                                <code className="text-gray-300">AABBCCDD</code> is the HEX of XOR-encrypted
+                                                &quot;hello&quot;)
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <span className="font-semibold text-gray-200">ACK packet: </span>
+                                            <code className="text-[#ffd89b] text-sm break-all">
+                                                MY_DEVICE_ID:LORA_ACK_PREFIX:receivedMessageId
+                                            </code>
+                                            <p className="mt-2 text-gray-400 text-sm">
+                                                Example:{" "}
+                                                <code className="text-gray-300">PhoneNode:A:123</code>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            Configured for{" "}
+                                            <strong className="text-gray-200">915 MHz</strong>,{" "}
+                                            <strong className="text-gray-200">SF7</strong>,{" "}
+                                            <strong className="text-gray-200">125 kHz</strong> bandwidth (legal configuration
+                                            for Australia).
+                                        </li>
+                                    </ul>
+
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-3">WiFi / web protocol</h3>
+                                    <ul className="list-disc pl-5 space-y-2 text-gray-300 mb-4">
+                                        <li>
+                                            <strong className="text-gray-200">HTTP:</strong> serves the main HTML page.
+                                        </li>
+                                        <li>
+                                            <strong className="text-gray-200">WebSocket (JSON):</strong>
+                                        </li>
+                                    </ul>
+                                    <div className="space-y-4 mb-6">
+                                        <div>
+                                            <p className="text-sm font-mono text-gray-500 mb-1">
+                                                Client to server (sending message)
+                                            </p>
+                                            <pre className="text-sm font-mono bg-black/40 text-gray-300 p-4 rounded-xl overflow-x-auto border border-white/10 whitespace-pre-wrap break-all">
+                                                {`{"text": "message_content", "local_id": "local_msg_123"}`}
+                                            </pre>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-mono text-gray-500 mb-1">
+                                                Server to client (identity)
+                                            </p>
+                                            <pre className="text-sm font-mono bg-black/40 text-gray-300 p-4 rounded-xl overflow-x-auto border border-white/10 whitespace-pre-wrap break-all">
+                                                {`{"type": "system", "event": "identity", "deviceId": "BigNode", "boardName": "BigNode"}`}
+                                            </pre>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-mono text-gray-500 mb-1">
+                                                Server to client (received message)
+                                            </p>
+                                            <pre className="text-sm font-mono bg-black/40 text-gray-300 p-4 rounded-xl overflow-x-auto border border-white/10 whitespace-pre-wrap break-all">
+                                                {`{"sender": "PhoneNode", "text": "decrypted_message"}`}
+                                            </pre>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-mono text-gray-500 mb-1">
+                                                Server to client (ACK status)
+                                            </p>
+                                            <pre className="text-sm font-mono bg-black/40 text-gray-300 p-4 rounded-xl overflow-x-auto border border-white/10 whitespace-pre-wrap break-all">
+                                                {`{"type": "ack_status", "local_id": "local_msg_123", "lora_msg_id": 456, "status": "acked" | "failed_ack" | "pending_ack"}`}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </section>
+                            </>
+                        )}
 
                         {project.slug === "rentto-classifieds" && (
                             <>
@@ -321,6 +477,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                             </section>
                         )}
 
+                        {project.slug === "minutely" && <MinutelyGallery />}
+
                         {project.slug === "brickpress" && (
                             <section className="mb-10">
                                 <h2 className="text-xl font-bold mb-3 text-secondary">
@@ -359,15 +517,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                                 </div>
                             </section>
                         )}
-
-                        <section>
-                            <h2 className="text-xl font-bold mb-3 text-secondary">
-                                How I built it
-                            </h2>
-                            <div className="text-gray-300 leading-relaxed whitespace-pre-line">
-                                {project.execution}
-                            </div>
-                        </section>
                     </div>
                 </div>
             </article>

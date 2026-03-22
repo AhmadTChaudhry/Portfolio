@@ -62,15 +62,51 @@ export const projects: Project[] = [
         slug: "lora-encrypted-comms",
         title: "Encrypted Off-Grid Communications (LoRa)",
         description:
-            "Engineered a custom firmware solution using C/C++ on ESP32 microcontrollers. Integrated LoRa radio modules for long-range wireless communication without cellular reliance and developed a custom encryption hash function.",
-        tags: ["C/C++", "ESP32", "LoRa", "Embedded Systems"],
-        links: { demo: "https://youtu.be/B4Z7MDHfVqc", code: "#", type: "video" },
+            "ESP32 LoRa nodes with encrypted payloads, ACK/retry delivery, OLED status, and a browser chat UI served from the device over WiFi and WebSockets.",
+        tags: [
+            "C/C++",
+            "ESP32",
+            "LoRa",
+            "SX1262",
+            "PlatformIO",
+            "WebSockets",
+            "RadioLib",
+        ],
+        links: {
+            demo: "https://youtu.be/B4Z7MDHfVqc",
+            code: "https://github.com/AhmadTChaudhry/OffGrid-LoRa-Communication",
+            type: "video",
+        },
         category: "Embedded Systems - Internet of Things",
         media: [{ type: "youtube", url: "https://www.youtube.com/watch?v=B4Z7MDHfVqc" }],
         story:
-            "I was interested in off-grid, long-range communication that doesn't depend on cellular or Wi-Fi. LoRa's low-power, long-range characteristics made it ideal for building a secure messaging system that works in the field.",
+            "I wrote the firmware and software for the LoRa nodes and the embedded web server chat application myself, designed the hardware, assembled the boards, and 3D-printed casings for each node.\n\nOff-grid situations still need trustworthy comms when cellular or the internet is missing, unreliable, or not appropriate: remote sites, crowded events, disaster response, or small teams that want private radio-backed messaging without infrastructure. LoRa is a strong fit for low-power, long-range links, so I built a complete prototype that pairs robust radio behavior with a familiar chat experience in the browser.",
         execution:
-            "Wrote custom firmware in C/C++ for ESP32, integrated LoRa radio modules, and implemented a custom encryption scheme. Focused on range, power efficiency, and ensuring only intended receivers could read the payloads.",
+            "Overview\n\nEach node runs modular C++ firmware (PlatformIO) on ESP32-class hardware with an SX1262 LoRa transceiver. The device brings up a WiFi access point, serves a responsive web UI over HTTP, and uses WebSockets for real-time chat and delivery status. Payloads are encrypted before they go over LoRa; an acknowledgment and retry path reports success, failure after retries, or pending state back to the UI. A small OLED shows AP SSID/password, assigned IP, connected WiFi clients, and snippets of recent LoRa TX/RX so you can operate without a phone at a glance. A GPIO button can fire a predefined \"alive\" ping across the link.\n\nHardware layout, tested boards, components per node, and LoRa/WebSocket framing (with diagrams) are documented in the Hardware architecture and Communication protocols sections below.\n\nSoftware architecture\n\nThe codebase splits into managers: lora_manager configures the radio via RadioLib, formats packets, handles interrupt-driven reception, maintains an outgoing queue, and drives ACK timeouts/retries; web_manager hosts AsyncWebServer on port 80, serves the chat page, and manages JSON over WebSocket at /ws; display_manager drives U8g2 with states for boot, AP details, IP ready, chat context, and RX alerts; encryption helpers XOR-encrypt message bodies and represent ciphertext as HEX on the wire. ArduinoJson serializes WebSocket messages. WiFi stack and async web work sit on FreeRTOS alongside a lean Arduino loop, with LoRa events surfaced from ISR context safely.",
+    },
+    {
+        slug: "minutely",
+        title: "Minutely – Smart Meeting Debrief",
+        description:
+            "Meeting debrief workspace: paste a transcript and get an executive summary, owned action items with deadlines and priorities, and a structured view of risks and blockers, plus Kanban and markdown export.",
+        tags: ["Next.js", "n8n", "Gemini", "AI", "App Router", "TypeScript"],
+        links: {
+            demo: "https://minutely-six.vercel.app",
+            code: "#",
+            label: "Visit project",
+        },
+        category: "Web Development - AI Development",
+        story:
+            "After messy meetings, the hard part is not the conversation; it is turning it into something teams can execute. I built Minutely so a raw transcript becomes leadership-ready output without manual note cleanup.",
+        execution:
+            "Minutely is a meeting debrief workspace: you give it a transcript, and it turns the conversation into something you can act on: executive summary, owned action items with deadlines and priorities, and a structured view of risks and blockers.\n\nThe interface is built for scanning and sharing: tables with clear badges, optional markdown export, and a Kanban-style board so the same debrief can be viewed as columns (summary, actions by priority, risks).\n\nBehind the scenes, the Next.js app does not run the models itself. It orchestrates the UI and proxies requests to an n8n webhook. The n8n workflow runs three Gemini agents in parallel (actions, risks, and summary), then merges the outputs into JSON for the frontend. Configuration uses N8N_WEBHOOK_URL in .env.local pointing at your n8n webhook.\n\nStack: Next.js (App Router) for the UI and an API route that forwards transcripts to n8n; n8n for multi-agent orchestration and Gemini calls.",
+        media: [
+            { type: "image", url: "/projects/minutely/hero.png" },
+            { type: "image", url: "/projects/minutely/n8n-workflow.png" },
+            { type: "image", url: "/projects/minutely/summary-actions.png" },
+            { type: "image", url: "/projects/minutely/risks.png" },
+            { type: "image", url: "/projects/minutely/kanban.png" },
+        ],
     },
     {
         slug: "ai-resume-tailor",
@@ -125,7 +161,7 @@ export const projects: Project[] = [
     },
     {
         slug: "threataware",
-        title: "ThreatAware",
+        title: "ThreatAware – ML Intrusion Detection",
         description:
             "Smart Intrusion Detection using ML. Implemented Machine Learning to Detect Intruders and Register Friends through Pattern Mining Algorithms. Developed Firebase Implementation and Cross Platform Application using Flutter.",
         tags: ["Flutter", "Firebase", "Machine Learning", "Dart"],
