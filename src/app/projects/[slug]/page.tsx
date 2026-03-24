@@ -6,6 +6,7 @@ import { getProjectBySlug, projects } from "@/data/projects";
 import type { ProjectMedia, ProjectLink } from "@/data/projects";
 import { getYoutubeVideoId } from "@/lib/youtube";
 import MinutelyGallery from "@/components/minutely-gallery";
+import VantageGallery from "@/components/vantage-gallery";
 
 export function generateStaticParams() {
     return projects.map((p) => ({ slug: p.slug }));
@@ -478,6 +479,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         )}
 
                         {project.slug === "minutely" && <MinutelyGallery />}
+                        {project.slug === "vantage-agent-architect" && <VantageGallery />}
 
                         {project.slug === "brickpress" && (
                             <section className="mb-10">

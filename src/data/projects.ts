@@ -109,6 +109,30 @@ export const projects: Project[] = [
         ],
     },
     {
+        slug: "vantage-agent-architect",
+        title: "Vantage - AI Agent Architect",
+        description:
+            "Strategy-to-agent architecture workspace that turns planning inputs into initiatives, role-based agents, and relationship maps with export-ready structured output.",
+        tags: ["Next.js", "n8n", "Gemini", "AI Agents", "TypeScript", "Architecture Mapping"],
+        links: {
+            demo: "#",
+            code: "#",
+            label: "Visit project",
+        },
+        category: "Web Development - AI Development",
+        story:
+            "Teams can have strong strategy documents but still struggle to operationalize them into clear AI agent roles with ownership, wave planning, and handoffs. I built Vantage to bridge that gap: it converts strategy input into a workforce-style agent architecture that leaders and delivery teams can actually execute.",
+        execution:
+            "Vantage is an AI Agent Architect workspace focused on moving from planning to implementation-ready structures.\n\nYou start with strategic input, and the system produces initiatives, specialized agents, and explicit relationships (handoffs, triggers, oversight, and data-sharing links). The result is a structured architecture view that can be scanned visually and exported.\n\nThe interface is built around architecture clarity: a workforce map by execution wave, agent catalogue cards with augments/tools, and a detail panel for deep inspection of selected agents.\n\nUnder the hood, orchestration follows a multi-agent flow similar to production planning pipelines: extraction and initiative analysis feed specialist agent-generation steps, outputs are merged, then assembled for client consumption.",
+        media: [
+            { type: "image", url: "/projects/vantage/hero.png" },
+            { type: "image", url: "/projects/vantage/workflow.png" },
+            { type: "image", url: "/projects/vantage/workforce-map.png" },
+            { type: "image", url: "/projects/vantage/agent-detail-panel.png" },
+            { type: "image", url: "/projects/vantage/agents-view.png" },
+        ],
+    },
+    {
         slug: "ai-resume-tailor",
         title: "AI Resume Tailor",
         description:
