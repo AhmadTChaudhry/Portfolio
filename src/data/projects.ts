@@ -93,7 +93,7 @@ export const projects: Project[] = [
         links: {
             demo: "https://minutely-six.vercel.app",
             code: "#",
-            label: "Visit project",
+            label: "Live Demo",
         },
         category: "Web Development - AI Development",
         story:
@@ -115,9 +115,9 @@ export const projects: Project[] = [
             "Strategy-to-agent architecture workspace that turns planning inputs into initiatives, role-based agents, and relationship maps with export-ready structured output.",
         tags: ["Next.js", "n8n", "Gemini", "AI Agents", "TypeScript", "Architecture Mapping"],
         links: {
-            demo: "#",
+            demo: "https://vantage-agent-psi.vercel.app",
             code: "#",
-            label: "Visit project",
+            label: "Live Demo",
         },
         category: "Web Development - AI Development",
         story:
@@ -141,7 +141,7 @@ export const projects: Project[] = [
         links: {
             demo: "https://resume-tailor-eosin.vercel.app",
             code: "#",
-            label: "Visit project",
+            label: "Live Demo",
         },
         category: "Web Development - AI Development",
         media: [
