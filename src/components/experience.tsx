@@ -8,9 +8,16 @@ import { gsap, registerScrollTrigger } from "@/lib/gsap";
 
 const experiences = [
     {
+        role: "AI Product Engineer",
+        company: "FromHereOn",
+        period: "03/2026 – Present",
+        description:
+            "Building AI product capabilities from concept to shipped features, including product workflows, integration architecture, and implementation across the frontend and backend stack.",
+    },
+    {
         role: "Barista (Part-Time)",
         company: "Ferguson Plarre",
-        period: "07/2024 – Present",
+        period: "07/2024 – 08/2025",
         description: "Delivering high-quality customer service in a fast-paced environment. consistently meeting daily sales and service targets. Managing multiple priorities under time pressure while maintaining attention to detail and compliance with safety and hygiene standards. Collaborating with diverse team members to ensure smooth operations.",
     },
     {

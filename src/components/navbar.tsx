@@ -68,7 +68,7 @@ export default function Navbar() {
                         <Linkedin size={20} />
                     </a>
                     <Link
-                        href="/resume.pdf"
+                        href="/#contact"
                         className="liquid-glass-btn px-4 py-2 text-sm uppercase tracking-widest"
                     >
                         Resume
